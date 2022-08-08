@@ -98,8 +98,6 @@ const TrafficLightPage: NextPage = () => {
         lightString = "blue";
     }
 
-    console.log(value, lightString);
-
     return <p>{lightString}</p>;
   };
 
