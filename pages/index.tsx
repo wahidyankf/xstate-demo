@@ -4,7 +4,7 @@ import Link from "next/link";
 const Home: NextPage = () => {
   return (
     <div>
-      <Link href="/demo">To The Demo</Link>
+      <Link href="/traffic-light">Traffic Light Machine</Link>
     </div>
   );
 };
