@@ -16,7 +16,6 @@ function Header() {
         <li>
           <Link href="/traffic-light-full">Traffic Light Machine - Full</Link>
         </li>
-
         <li>
           <Link href="/form-00-very-simple">Form - 00 - Very Simple</Link>
         </li>
