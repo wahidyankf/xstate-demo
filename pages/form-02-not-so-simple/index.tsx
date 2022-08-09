@@ -15,8 +15,8 @@ type status = { kind: "ok" } | { kind: "error"; message: string } | null;
 
 type FormContext = {
   username: { value: string; status: status };
-  phoneNumber: { value: string; status: status };
-  notes: { value: string; status: status };
+  phoneNumber: string;
+  notes: string;
 };
 type FormTypeState =
   | { value: "initial"; context: FormContext }
@@ -24,13 +24,13 @@ type FormTypeState =
   | { value: "submitted"; context: FormContext };
 
 const formMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAVQAUARAQQBUBRAfWoGVWAlAOUYBZVolAAHVLGK5U+MSAAeiAIwBmNdgBMAVgAMelQHYALAE4tKgGxqdWgDQgAnqqOa1Bg1b1mjWqwAcJgC+wY5oWHiEJBQ0DCwctAASAPL8HPzUQgBCfAqS0iRyCsoI6pq6BsbmljZ2ji4I-nrYHgZqKnoB3m4maqHhGDgEMrF0TGzs-ClsXPlSMsVISqoa2vqGphbWtg7OiCbGrZ5dOmZWKiYBZgMgETjIuOTkBFBxExzcfIIi84Wy8mWpXMRmwnTMhz8HS6eh0DUQGk0ZmRyICGysRmMt3u2Eez1e7wS7GSaQyWVyvD+i0BoGBJhM2BMOg6NiuWiMZw58LKRlBJy0PjMsPOWn6YTuQ1xTxe+De4yJ01mVKKNJWCB06mwVish10fmsRkC3Ou2BRyO8mzMKi02MleJlby41GyQgAksxlQCSohTDotTobD4TG5bFZuWpztgNoYdOYPGcVDpQuL8KgIHAFDiRjFyJ6lrSDntGh4zMcDJYgnpLDoa7bIvbXnnVaVY6XrCYfBi1CZtWpuSZ-Nh+d3rsGMUnxTjYABXABGmGIREgTe9ZU2WqDWnpvIC3ZU-cHw6uEMNHLrmBXQNUAW5KgCQ5Oj5ORmTwSAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAVQAUARAQQBUBRAfWoGVWAlAOUYBZVolAAHVLGK5U+MSAAeiAIwBmNdgBMAVgAMBlQA4A7ABYVANj1qjAGhABPVSc1aAnJ6NbLJvT7UTEwBfYIc0LDxCEgoaBhYOWgAJAHl+Dn5qIQAhPgVJaRI5BWUEdTd9Q1MLa1sHZwQfPW1PTy09Cz1LHW7Q8IwcAhlYuiY2dn4Uti58qRlipCVVDW1KvWNzKxt7J0QLExbPS3cdHRUVCxUdPpAInGRccnICKDixjm4+QRFZwtl5RalMzuA4qPTuQI2IJ6Exgyz1RAaTStTxddxWPwqG53bAPJ4vN4JdjJNIZLK5Xi-eYA0BAsxmbBmHRqC4mIyWMwmHrw3ZlEyWbAokE9NQ6dFmIzYga4x7PfCvUZEybTKlFGlLBBnTSWDkwozs-m+NQIhDuZoGC22MEmdxaflSyJ4uWvLjUbJCACSzFV-xKiHMOmw3UsWhZtg0Zn8JrU7gFwM8-PpRj0WtCYRA+FQEDgChxQxi5B9C1pey00fBh3c3htOnabId91lLyL6tKOmB2CskeB+q6zJ0JrMukFrSM9PHliM7gb2FgAFcAEaYYhESAtv1ldYHawQsyWWxs4xl3lDwMosfjvdThvrwGqHYNYxp4JAA */
   createMachine<FormContext, FormEvent, FormTypeState>(
     {
       context: {
         username: { value: "", status: null },
-        phoneNumber: { value: "", status: null },
-        notes: { value: "", status: null },
+        phoneNumber: "",
+        notes: "",
       },
       id: "form",
       initial: "initial",
@@ -83,8 +83,16 @@ const formMachine =
       actions: {
         updateUsername: assign((_context, event) => {
           if (event.type === "UPDATE_USERNAME") {
+            if (event.value.length >= 6) {
+              return {
+                username: { value: event.value, status: { kind: "ok" } },
+              };
+            }
             return {
-              username: { value: event.value, status: { kind: "ok" } },
+              username: {
+                value: event.value,
+                status: { kind: "error", message: "username is too short" },
+              },
             };
           }
           return {};
@@ -92,7 +100,7 @@ const formMachine =
         updatePhoneNumber: assign((context, event) => {
           if (event.type === "UPDATE_PHONE_NUMBER") {
             return {
-              phoneNumber: { value: event.value, status: { kind: "ok" } },
+              phoneNumber: event.value,
             };
           }
 
@@ -101,7 +109,7 @@ const formMachine =
         updateNotes: assign((context, event) => {
           if (event.type === "UPDATE_NOTES") {
             return {
-              notes: { value: event.value, status: { kind: "ok" } },
+              notes: event.value,
             };
           }
           return {};
@@ -121,8 +129,8 @@ const formMachine =
         },
         isFormDataComplete: (context, event): boolean => {
           return (
-            context.username.value.length > 0 &&
-            context.phoneNumber.value.length > 0
+            context.username.status?.kind === "ok" &&
+            context.phoneNumber.length > 0
           );
         },
       },
@@ -138,6 +146,8 @@ const FormPage: NextPage = () => {
   };
 
   let renderForm = () => {
+    let usernameStatus = currentState.context.username.status;
+
     return (
       <form onSubmit={(e) => handleSubmit(e)}>
         <span>Username: </span>
@@ -152,12 +162,13 @@ const FormPage: NextPage = () => {
             });
           }}
         />
+        {usernameStatus?.kind === "error" && <p>{usernameStatus?.message}</p>}
         <br></br>
         <br></br>
         <span>Phone Number: </span>
         <input
           type="text"
-          value={currentState.context.phoneNumber.value}
+          value={currentState.context.phoneNumber}
           onChange={(e) => {
             e.preventDefault();
             send({
@@ -171,7 +182,7 @@ const FormPage: NextPage = () => {
         <span>Notes: </span>
         <input
           type="text"
-          value={currentState.context.notes.value}
+          value={currentState.context.notes}
           onChange={(e) => {
             e.preventDefault();
             send({
@@ -182,7 +193,12 @@ const FormPage: NextPage = () => {
         />
         <br></br>
         <br></br>
-        <button onClick={handleSubmit}>Submit</button>
+        <button
+          onClick={handleSubmit}
+          disabled={currentState.context.username.status?.kind !== "error"}
+        >
+          Submit
+        </button>
       </form>
     );
   };
