@@ -113,7 +113,7 @@ const lightMachine =
     }
   );
 
-const TrafficLightPage: NextPage = () => {
+const FormPage: NextPage = () => {
   const [currentState, send] = useMachine(lightMachine);
 
   let handleSubmit = (e: React.SyntheticEvent) => {
@@ -186,4 +186,4 @@ const TrafficLightPage: NextPage = () => {
   );
 };
 
-export default TrafficLightPage;
+export default FormPage;
