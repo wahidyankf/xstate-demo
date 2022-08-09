@@ -54,6 +54,9 @@ const formMachine =
 const FormPage: NextPage = () => {
   const [currentState, send] = useMachine(formMachine);
 
+  console.log(currentState.value);
+  console.log(currentState.context);
+
   let handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
   };

@@ -24,7 +24,7 @@ type FormTypeState =
   | { value: "submitted"; context: FormContext };
 
 const formMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAVQAUARAQQBUBRAfWoGVWAlAOUYBZVolAAHVLGK5U+MSAAeiAIwBmNdgBMAVgAMBlQA4A7ABYVANj1qjAGhABPVSc1aAnJ6NbLJvT7UTEwBfYIc0LDxCEgoaBhYOWgAJAHl+Dn5qIQAhPgVJaRI5BWUEdTd9Q1MLa1sHZwQfPW1PTy09Cz1LHW7Q8IwcAhlYuiY2dn4Uti58qRlipCVVDW1KvWNzKxt7J0QLExbPS3cdHRUVCxUdPpAInGRccnICKDixjm4+QRFZwtl5RalMzuA4qPTuQI2IJ6Exgyz1RAaTStTxddxWPwqG53bAPJ4vN4JdjJNIZLK5Xi-eYA0BAsxmbBmHRqC4mIyWMwmHrw3ZlEyWbAokE9NQ6dFmIzYga4x7PfCvUZEybTKlFGlLBBnTSWDkwozs-m+NQIhDuZoGC22MEmdxaflSyJ4uWvLjUbJCACSzFV-xKiHMOmw3UsWhZtg0Zn8JrU7gFwM8-PpRj0WtCYRA+FQEDgChxQxi5B9C1pey00fBh3c3htOnabId91lLyL6tKOmB2CskeB+q6zJ0JrMukFrSM9PHliM7gb2FgAFcAEaYYhESAtv1ldYHawQsyWWxs4xl3lDwMosfjvdThvrwGqHYNYxp4JAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAVQAUARAQQBUBRAfWoGVWAlAOUYBZVolAAHVLGK5U+MSAAeiAIwBmNdgBMagCwB2ABy6AnLrUBWEypNqANCACeq-Zq1WL+gAxeVurQBspvoAviEOaFh4hCQUNAwsHLQAEgDy-Bz81EIAQnwKktIkcgrKCOpuekam5lY29k6IgV7aNoY+ZhaGhiqh4SCROAQycXRMbOz8qWxcBVIyJUhKqhraVcZmlta2Ds4Iur3Yft2GJlpeWpcqgWERGEP4sGDoJPhQ8eMc3HyCInNFsnkSzKpgC2BMtj8ARMXkMaiMu0QGk0hn0QQsAUxhi0Zy0twG92iTxeBHeY0S7BS6Uy2TyvH+CyBoBBul02D01mhFi05jUAUMiPKaPBBj5xhUNm5AQs+MGROerzJCQmUxmDOKTOWCAs6mwFhq2P0ui8AR8DT2p3BqJsKh1fisaNlhIIxMVlC41ByQgAksx1YDSogjRZsLoApZ9SovBZYSoAoK1CYwZYAlpDNL+e1dIYwv18KgIHAFHLhrFyP7FszEP4E14TEcYfp3D5zLaTE6oi6FaSK5qyhZ4UcukYtNd2mYTIL-CG4ZiNBjUYYY2oOzhYABXABGmGIREgvcD5V8+nZHL8OOMPMnjX27mws-5o6T+iTYdXB+BqgFN5UOdzQA */
   createMachine<FormContext, FormEvent, FormTypeState>(
     {
       context: {
@@ -195,7 +195,7 @@ const FormPage: NextPage = () => {
         <br></br>
         <button
           onClick={handleSubmit}
-          disabled={currentState.context.username.status?.kind !== "error"}
+          // disabled={currentState.context.username.status?.kind !== "error"}
         >
           Submit
         </button>
