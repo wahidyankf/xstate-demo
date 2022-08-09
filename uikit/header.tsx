@@ -14,6 +14,8 @@ function Header() {
       </Link>
       {renderSeparator()}
       <Link href="/traffic-light-full">Traffic Light Machine - Full</Link>
+      {renderSeparator()}
+      <Link href="/form-01-simple">Form - 01 - Simple</Link>
     </div>
   );
 }
