@@ -2,7 +2,7 @@ import Link from "next/link";
 
 function Header() {
   let renderSeparator = () => {
-    return <span> &gt;&gt;&gt; </span>;
+    return <span> |&gt; </span>;
   };
 
   return (
