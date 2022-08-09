@@ -1,6 +1,7 @@
-import { NextPage } from "next/types";
-import { assign, createMachine, StateValue } from "xstate";
 import { useMachine } from "@xstate/react";
+import { NextPage } from "next/types";
+import { createMachine, StateValue } from "xstate";
+import Header from "../../uikit/header";
 
 type LightEvent = { type: "GO" } | { type: "ATTENTION" } | { type: "STOP" };
 type LightContext = {};
@@ -109,10 +110,13 @@ const TrafficLightPage: NextPage = () => {
   };
 
   return (
-    <p>
-      {renderActions()}
-      {renderLight(currentState.value)}
-    </p>
+    <div>
+      <Header />
+      <p>
+        {renderActions()}
+        {renderLight(currentState.value)}
+      </p>
+    </div>
   );
 };
 

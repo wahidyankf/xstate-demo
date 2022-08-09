@@ -1,18 +1,8 @@
 import type { NextPage } from "next";
-import Link from "next/link";
+import Header from "../uikit/header";
 
 const Home: NextPage = () => {
-  return (
-    <div>
-      <Link href="/traffic-light-01-simple">
-        <button>Traffic Light Machine - 01 - Simple</button>
-      </Link>
-      <br></br>
-      <Link href="/traffic-light-full">
-        <button>Traffic Light Machine - Full</button>
-      </Link>
-    </div>
-  );
+  return <Header></Header>;
 };
 
 export default Home;
