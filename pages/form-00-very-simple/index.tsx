@@ -11,7 +11,7 @@ type FormTypeState =
   | { value: "filling"; context: FormContext };
 
 const formMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAVQAUARAQQBUBRAfWoGVWAlAOUYBZVolAAHVLGK5U+MSAAeiAIwBmNdgBMAVgAMelQHYALAE4tKgGxqdWgDQgAnqqOa1Bwyp02fZnQC+AY5oWHiEJBQ0DCwctAASAPL8HPzUQgBCfAqS0iRyCsoI6pq6Bsbmlr4OzohaVnrYHgZaemZqJmpGKiaBwSChOAQyUXRMbOz8iWxcOVIyBUhKqhra+oamFta2NS4IJsZNnlpmVgAcer1qWkEhGDjIuOTkBFDR4xzcfIIic3my8iWRXMRmwKjaByMWjU4IuJkcew0JmwnkMF2hxh8JluA3u2Eez1e71i7ASyVS6SyvD+C0BoGBJmRV22JjOWiMOjMRgRrlBqLa7KMbTUZz6dzCBJe+DeYxJUxmNPydOWCB06mwVisB3B4LUVjcOh5CDOZmwZnNFrMeisJxUZjOOMG+KeUreXGoGSEAElmIqAYVEKYdBqfB4zCY3LYdGcjWpTth1npbIYdKG9EYgv18KgIHAFE7hpFyH7FvTECZdogw0cWm5rWr9Y68ZLXiXlUUdOYwVqVCpoXZNZyjRWrCjjm52lyOU2wrAAK4AI0wxCIkDbAeKGw1EJMBn8Zz1ZmH9THBh2ehORjMKhnmHXQNUMdqxQdmaAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAVQAUARAQQBUBRAfWoGVWAlAOUYBZVolAAHVLGK5U+MSAAeiAIwBmNdgBMAVgAMelQHYALAE4tKgGxqdWgDQgAnqp1ns1q1aNqAHGsMtE3UAXxDHNCxsZFxycgIoGgYWDm4+QREFSWkSOQVlBDUtdxUTPSsdN18rFRVfXUcXBF93Mza2qwNjMxUtMPCQfFQIOAVInAIZCiypGTykJUQTB2dVHw8vK19-LTUbFT0TMIiMHBi4hJmc2XkFgr8VDzMdDR0TFqMDCsbVeuwDAxaPRtPRuKy7Y4gcZXOa3UAFOo-BB1f4AtHovRGfohIA */
   createMachine<FormContext, FormEvent, FormTypeState>(
     {
       context: { username: "" },
@@ -31,6 +31,7 @@ const formMachine =
             UPDATE_USERNAME: {
               actions: "updateUsername",
               target: "filling",
+              internal: false,
             },
           },
         },
