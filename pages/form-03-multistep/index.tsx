@@ -4,75 +4,80 @@ import React from "react";
 import { assign, createMachine } from "xstate";
 import Header from "../../uikit/header";
 
-type FormEvent =
-  | { type: "UPDATE_NOTES"; value: string }
-  | { type: "UPDATE_USERNAME"; value: string }
-  | { type: "UPDATE_PHONE_NUMBER"; value: string }
-  | { type: "UPDATE_NOTES"; value: string }
-  | { type: "SUBMIT" };
-
 type status = { kind: "ok" } | { kind: "error"; message: string } | null;
 
-type FormContext = {
-  username: { value: string; status: status };
-  phoneNumber: string;
-  notes: string;
-};
-type FormTypeState =
-  | { value: "initial"; context: FormContext }
-  | { value: "inserting"; context: FormContext }
-  | { value: "submitted"; context: FormContext };
-
 const formMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAVQAUARAQQBUBRAfWoGVWAlAOUYBZVolAAHVLGK5U+MSAAeiAIwBmNdgBMAVgAMBlQA4A7ABYVANj1qjAGhABPVSc1aAnJ6NbLJvT7UTEwBfYIc0LDxCEgoaBhYOWgAJAHl+Dn5qIQAhPgVJaRI5BWUEdTd9Q1MLa1sHZwQfPW1PTy09Cz1LHW7Q8IwcAhlYuiY2dn4Uti58qRlipCVVDW1KvWNzKxt7J0QLExbPS3cdHRUVCxUdPpAInGRccnICKDixjm4+QRFZwtl5RalMzuA4qPTuQI2IJ6Exgyz1RAaTStTxddxWPwqG53bAPJ4vN4JdjJNIZLK5Xi-eYA0BAsxmbBmHRqC4mIyWMwmHrw3ZlEyWbAokE9NQ6dFmIzYga4x7PfCvUZEybTKlFGlLBBnTSWDkwozs-m+NQIhDuZoGC22MEmdxaflSyJ4uWvLjUbJCACSzFV-xKiHMOmw3UsWhZtg0Zn8JrU7gFwM8-PpRj0WtCYRA+FQEDgChxQxi5B9C1pey00fBh3c3htOnabId91lLyL6tKOmB2CskeB+q6zJ0JrMukFrSM9PHliM7gb2FgAFcAEaYYhESAtv1ldYHawQsyWWxs4xl3lDwMosfjvdThvrwGqHYNYxp4JAA */
-  createMachine<FormContext, FormEvent, FormTypeState>(
+  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAIQFEBxASQDkB9AMUYBkuX7FQAB1SxiuVPgEgAHogCMAZgXYATAFYADFoCc6gCxqF2jQHYANCACeibWux7tj7Qb0A2ba4VrXAXx8W0LGxkXHJyAihsWCIwQQB5fDBKAFUABQARAEEAFVpWZIBlWgAlZkyAWVopYVESCSlZBAAOcytENSa7OVcevTk9FSMVQb8AjBwQsIiomPjEyk5mRgKACVYC3NTWOOYqpBAasXr9xpUmlWwm41dBjQUTEw0bi2sEVw0L7p7XEwGTQ20oxAgQmoXC+Ei0Vi2QA7qgUhkcnlUisdnlmMlynRitUREdJCdEA4NJc5OoPioTAoVNomgoXu0VHpsFotHIPA81GdfP5geNgmDplDBLD4WksrlWMw4rkCrjauICaBGt4SR8FHovAomnS1No5AyEJrXNgnI5Bk4NHo9ECQQKphCZtC4QsWMs1htaFtsgB1OLy-ENRDnEwsuTebxNAyGBSuQ3uOTYTRaYZydm0zx+Xn4VAQOBSO0EMQUAN1JUyIkqQ1XU1m37fDXnW38ybgyGzBJgUuKoMIMmhqP3NSGSm2EyU+MPbBfHotDThtwKZtBVtC2ai7vHZXtTrT8l3cODOnxpom1kU42uNQmZegh1QTflxqeQ2x5lm5zaJQqdw8sZBWAAFcACNMGIGIIEfXtr0NOQNC5acekeYxjHZJpbygwk+yaWD0KzIA */
+  createMachine(
     {
       context: {
         username: { value: "", status: null },
         phoneNumber: "",
         notes: "",
       },
+      schema: {
+        context: {} as {
+          username: { value: string; status: status };
+          phoneNumber: string;
+          notes: string;
+        },
+        events: {} as
+          | { type: "BEGIN_FILLING" }
+          | { type: "UPDATE_USERNAME"; value: string }
+          | { type: "UPDATE_PHONE_NUMBER"; value: string }
+          | { type: "UPDATE_NOTES"; value: string }
+          | { type: "FINISH_STEP_ONE" }
+          | { type: "FINISH_STEP_TWO" },
+      },
       id: "form",
       initial: "initial",
       states: {
         initial: {
           on: {
-            UPDATE_USERNAME: {
-              actions: "updateUsername",
-              target: "inserting",
-            },
-            UPDATE_PHONE_NUMBER: {
-              actions: "updatePhoneNumber",
-              cond: "isPhoneNumberFieldValid",
-              target: "inserting",
-            },
-            UPDATE_NOTES: {
-              actions: "updateNotes",
-              target: "inserting",
+            BEGIN_FILLING: {
+              target: "filling",
             },
           },
         },
-        inserting: {
-          on: {
-            UPDATE_USERNAME: {
-              actions: "updateUsername",
-              target: "inserting",
-              internal: false,
+        filling: {
+          initial: "stepOne",
+          states: {
+            stepOne: {
+              on: {
+                UPDATE_USERNAME: {
+                  actions: "updateUsername",
+                  target: "stepOne",
+                  internal: false,
+                },
+                FINISH_STEP_ONE: [
+                  {
+                    actions: "updateUsername",
+                    target: "stepTwo",
+                  },
+                  {
+                    target: "stepOne",
+                    internal: false,
+                  },
+                ],
+              },
             },
-            UPDATE_PHONE_NUMBER: {
-              actions: "updatePhoneNumber",
-              cond: "isPhoneNumberFieldValid",
-              target: "inserting",
-              internal: false,
-            },
-            UPDATE_NOTES: {
-              actions: "updateNotes",
-              target: "inserting",
-              internal: false,
-            },
-            SUBMIT: {
-              cond: "isFormDataComplete",
-              target: "submitted",
+            stepTwo: {
+              on: {
+                UPDATE_PHONE_NUMBER: {
+                  actions: "updatePhoneNumber",
+                  cond: "isPhoneNumberFieldValid",
+                  target: "stepTwo",
+                  internal: false,
+                },
+                UPDATE_NOTES: {
+                  actions: "updateNotes",
+                  target: "stepTwo",
+                  internal: false,
+                },
+                FINISH_STEP_TWO: {
+                  target: "#form.submitted",
+                },
+              },
             },
           },
         },
@@ -85,15 +90,22 @@ const formMachine =
           if (event.type === "UPDATE_USERNAME") {
             if (event.value.length >= 6) {
               return {
-                username: { value: event.value, status: { kind: "ok" } },
+                username: {
+                  value: event.value,
+                  status: { kind: "ok" } as status,
+                },
+              };
+            } else {
+              return {
+                username: {
+                  value: event.value,
+                  status: {
+                    kind: "error",
+                    message: "username is too short",
+                  } as status,
+                },
               };
             }
-            return {
-              username: {
-                value: event.value,
-                status: { kind: "error", message: "username is too short" },
-              },
-            };
           }
           return {};
         }),
@@ -115,25 +127,7 @@ const formMachine =
           return {};
         }),
       },
-      guards: {
-        isPhoneNumberFieldValid: (context, event): boolean => {
-          function isNumeric(value: string) {
-            return /^-?\d+$/.test(value);
-          }
-
-          if (event.type === "UPDATE_PHONE_NUMBER") {
-            return event.value === "" ? true : isNumeric(event.value);
-          } else {
-            return false;
-          }
-        },
-        isFormDataComplete: (context, event): boolean => {
-          return (
-            context.username.status?.kind === "ok" &&
-            context.phoneNumber.length > 0
-          );
-        },
-      },
+      guards: {},
     }
   );
 
@@ -142,7 +136,7 @@ const FormPage: NextPage = () => {
 
   let handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    send({ type: "SUBMIT" });
+    // send({ type: "SUBMIT" });
   };
 
   let renderForm = () => {

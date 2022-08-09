@@ -13,7 +13,7 @@ type FormEvent =
 type FormContext = { username: string; phoneNumber: string; notes: string };
 type FormTypeState =
   | { value: "initial"; context: FormContext }
-  | { value: "filling"; context: FormContext }
+  | { value: "inserting"; context: FormContext }
   | { value: "submitted"; context: FormContext };
 
 const formMachine =
@@ -28,35 +28,35 @@ const formMachine =
           on: {
             UPDATE_USERNAME: {
               actions: "updateUsername",
-              target: "filling",
+              target: "inserting",
             },
             UPDATE_PHONE_NUMBER: {
               actions: "updatePhoneNumber",
               cond: "isPhoneNumberFieldValid",
-              target: "filling",
+              target: "inserting",
             },
             UPDATE_NOTES: {
               actions: "updateNotes",
-              target: "filling",
+              target: "inserting",
             },
           },
         },
-        filling: {
+        inserting: {
           on: {
             UPDATE_USERNAME: {
               actions: "updateUsername",
-              target: "filling",
+              target: "inserting",
               internal: false,
             },
             UPDATE_PHONE_NUMBER: {
               actions: "updatePhoneNumber",
               cond: "isPhoneNumberFieldValid",
-              target: "filling",
+              target: "inserting",
               internal: false,
             },
             UPDATE_NOTES: {
               actions: "updateNotes",
-              target: "filling",
+              target: "inserting",
               internal: false,
             },
             SUBMIT: {

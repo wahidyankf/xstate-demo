@@ -25,6 +25,9 @@ function Header() {
         <li>
           <Link href="/form-02-not-so-simple">Form - 02 - Not So Simple</Link>
         </li>
+        <li>
+          <Link href="/form-03-multistep">Form - 03 - Multistep</Link>
+        </li>
       </ul>
       <hr></hr>
     </div>
