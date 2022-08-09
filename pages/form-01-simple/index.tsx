@@ -16,8 +16,8 @@ type FormTypeState =
   | { value: "filling"; context: FormContext }
   | { value: "submitted"; context: FormContext };
 
-const lightMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAVQAUARAQQBUBRAfWoGVWAlAOUYBZVolAAHVLGK5U+MSAAeiAIwBmNdgBMAVgAMelQHYALAE4tKgGxqdWgDQgAnqqOa1Bg1b1mjWqwAcJiYAviGOaFh4hCQUNAwsHLQAEgDy-Bz81EIAQnwKktIkcgrKCOqaugbG5pY2do4uCP562B4Gaip6Ad5uJmphERg4BDJxdExs7PypbFwFUjIlSEqqGtr6hqYW1rYOzogmxm2e3TpmViomAWaDIJE4yLjk5ARQ8ZMc3HyCIgtFsnkKzK5iM2C6ZmCQSsRm6MJMjUQGk0ZlRqICmxhxjuD2wTxebw+iXYKXSmWyeV4-yWQNAIOC2BMOk6NmuWiM5w5iPKRjBpy0PjMenOVi0A3C92GeOer3w7wmxJmc2pxVpqwQOnU2CsVhMPihOhhegRBwQN2waNR3i2ZhUWhxUvxsveXGoOSEAElmCrAaVEKYdNrDR5IW5bDoAty1BdsJtDDpzB5zsawhL8KgIHAFLjRrFyD7lnTDvsmiGTgZLEE9JYdLWHVEnW8C2qygmzODdXajL49DrbdyTP5sPy1NdQzCdPWcLAAK4AI0wxCIkGbfvKW21Pjbg5UGJuA6HI7HJiME6nq+Bqkjpt3w9O99ORlTISAA */
+const formMachine =
+  /** @xstate-layout N4IgpgJg5mDOIC5QDMD2AnAtgOgJYDtcAXXAQwBsBiAVQAUARAQQBUBRAfWoGVWAlAOUYBZVolAAHVLGK5U+MSAAeiAIwBmNdgBMAVgAMBlQA4A7ABYVANj1qjAGhABPVSc1aAnJ-dnbak5es1AF8ghzQsPEISChoGFg5aAAkAeX4OfmohACE+BUlpEjkFZQR1N31DUwtA+ydELWttL3cdbx0dAL8QsIwcAhkYuiY2dn5kti48qRkipCVVDW0KvWNzKxta5wQLEybPI3c9V0szHW6QcJxkXHJyAihY4Y5uPkERKYLZeTmSs3ddlR6bwrSzqI6uBxbDSaZptdygkxAs6hC69bDXW73R7xdhJVLpTI5XgfGbfUC-MxmbCnNQqMwmIwnEwdSyQly7AycumWIxArTBFGXdE3O74B5DHFjCYkwpk+YIHTqbABCyAwFqSzHNkIA7YWGePSWDwqTznIUY0UPLjULJCACSzBlX2KiHMOmVHQ8tnaah0WhM2rU8OpXl5vt0fpUIRR+FQEDgCiF-Wi5Cds3JiDMWkDQL2nlOelMarNaIt9zTcpKOj+2CsZkLKkbAVarLq210etDRjUZgOln+JYisAArgAjTDEIiQCsu0orXbWbwmMrGHxqbVZ93NIzd3vwgeC3ozn6qTan6NBIA */
   createMachine<FormContext, FormEvent, FormTypeState>(
     {
       context: { username: "", phoneNumber: "", notes: "" },
@@ -114,7 +114,7 @@ const lightMachine =
   );
 
 const FormPage: NextPage = () => {
-  const [currentState, send] = useMachine(lightMachine);
+  const [currentState, send] = useMachine(formMachine);
 
   let handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
