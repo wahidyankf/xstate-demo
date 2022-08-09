@@ -3,69 +3,51 @@ import { assign, createMachine, StateValue } from "xstate";
 import { useMachine } from "@xstate/react";
 
 type LightEvent = { type: "GO" } | { type: "ATTENTION" } | { type: "STOP" };
-type LightContext = {
-  lastAction: "GO" | "STOP";
-};
+type LightContext = {};
 type LightTypestate =
   | { value: "red"; context: LightContext }
   | { value: "yellow"; context: LightContext }
   | { value: "green"; context: LightContext };
 
 const lightMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QBsCWUAWAXAdAJ0gGIBxAeUVAAcB7WVLVagOwpAA9EBGAFk5wE4ArAGZOwgGzDBvAEwAGQQBoQAT0TDuAdhxzdc4Zs4AOcZ3FzuAX0vK0mXCrDJk1AO6E2sLAEMsYHN4AZn54ABTyugCUhHbYOI7Obqw0dAzMrBwIPHxCohJSsgrKaghG-AL8lZUKmvzCMtzC1rbocVAEYEyEAMoAKqQACsm09IwsSOxcvAIiYpLSnPJKqogy5jp6DdxbPNY2IEzUEHCssbgEEMOpYxmIgjIzeZqmcjKcCvzF6qYbupJyZgMf2aIDO8ScLlcV1G6QmmW2whwgk2-DkmiMgJkmi+CCx4iRemRMmk4hkBhBYPaYE60LS41A8JkOM49xw4nZHLk4n47K5FNaWFpNzhXCMzKMvz0Uqlmj2liAA */
-  createMachine<LightContext, LightEvent, LightTypestate>(
-    {
-      context: { lastAction: "STOP" },
-      id: "light",
-      initial: "red",
-      states: {
-        red: {
-          on: {
-            GO: {
-              actions: assign((context, event) => {
-                return {
-                  lastAction: "GO",
-                };
-              }),
-              target: "yellow",
-            },
+  /** @xstate-layout N4IgpgJg5mDOIC5QBsCWUAWAXAdAJ0gGIBxAeUVAAcB7WVLVagOwpAA9EBGAVgAYcAnEIEAOAOydeI7gGYAbHJkAaEAE9EA-r23aATLpliZAmTO4BfcyrSZcBCIQCCAFWcBRAHLOAkqQ+saOgZmVg4EHn5hUQkpWQVlNURdbgAWQWEjbW4eTgFLa3RsHFUwZGRqAHcSciQQQPpGFlqw4xkcXhlOAyMxEU5OFIFuFXUEZLEcQaFM3mzsvKsQGyKSssrCAGVnUgAFANoGkOauATl2zoMRFMUU5M4RpN4zqIkZXRi5BYLbHCgCMCYm22e1q9WCTVAYRSMhE7TkuhSInEpm0MhSDwQhjSfD0AzkfUM0nyS0KuD+YABTlcnh8fn2QUaoUQrXOXUMhP6g2GiTGvAEOBxqN4YjkKR4ROJTGoEDgrGWdkg9MOEPYiFuGLM3Bwkh011u3AEXWJ8uKpXKFSV4KZYxE-LkEiuYmhAgkBgxCN0OFMpl0PDkswUcgsixN5IBlsZxwQqU4ODEHU4ci6ws0Ijk7pSWs+Qk+b3xwu4umNpIjR0hXBEGM4sJ0tbrvAGlksQA */
+  createMachine<LightContext, LightEvent, LightTypestate>({
+    context: {},
+    id: "light",
+    initial: "red",
+    states: {
+      red: {
+        on: {
+          GO: {
+            target: "green",
+          },
+          ATTENTION: {
+            target: "yellow",
           },
         },
-        yellow: {
-          after: {
-            "2000": [
-              {
-                cond: "isGoing",
-                target: "green",
-              },
-              {
-                cond: "isStopping",
-                target: "red",
-              },
-            ],
+      },
+      yellow: {
+        on: {
+          GO: {
+            target: "green",
+          },
+          STOP: {
+            target: "red",
           },
         },
-        green: {
-          on: {
-            STOP: {
-              actions: assign((context, event) => {
-                return {
-                  lastAction: "STOP",
-                };
-              }),
-              target: "yellow",
-            },
+      },
+      green: {
+        on: {
+          STOP: {
+            target: "red",
+          },
+          ATTENTION: {
+            target: "yellow",
           },
         },
       },
     },
-    {
-      guards: {
-        isStopping: (context, event) => context.lastAction === "STOP",
-        isGoing: (context, event) => context.lastAction === "GO",
-      },
-    }
-  );
+  });
 
 const TrafficLightPage: NextPage = () => {
   const [currentState, send] = useMachine(lightMachine);
@@ -75,7 +57,7 @@ const TrafficLightPage: NextPage = () => {
   const renderActions = () => {
     return (
       <div>
-        {currentState.value === "red" && (
+        {currentState.value !== "green" && (
           <button
             onClick={(e) => {
               send({ type: "GO" });
@@ -84,7 +66,16 @@ const TrafficLightPage: NextPage = () => {
             Go
           </button>
         )}
-        {currentState.value === "green" && (
+        {currentState.value !== "yellow" && (
+          <button
+            onClick={(e) => {
+              send({ type: "ATTENTION" });
+            }}
+          >
+            Attention
+          </button>
+        )}
+        {currentState.value !== "red" && (
           <button
             onClick={(e) => {
               send({ type: "STOP" });

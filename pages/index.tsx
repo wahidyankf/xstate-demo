@@ -5,10 +5,12 @@ const Home: NextPage = () => {
   return (
     <div>
       <Link href="/traffic-light-01-simple">
-        Traffic Light Machine - 01 - Simple
+        <button>Traffic Light Machine - 01 - Simple</button>
       </Link>
       <br></br>
-      <Link href="/traffic-light-full">Traffic Light Machine - Full</Link>
+      <Link href="/traffic-light-full">
+        <button>Traffic Light Machine - Full</button>
+      </Link>
     </div>
   );
 };

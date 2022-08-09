@@ -12,7 +12,7 @@ type LightTypestate =
   | { value: "green"; context: LightContext };
 
 const lightMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QBsCWUAWAXAdAJ0gGIBxAeUVAAcB7WVLVagOwpAA9EBGAFk5wE4ArAGZOwgGzDBvAEwAGQQBoQAT0TDuAdhxzdc4Zs4AOcZ3FzuAX0vK0mXCrDJk1AO6E2sLAEMsYHN4AZn54ABTyugCUhHbYOI7Obqw0dAzMrBwIPHxCohJSsgrKaghG-AL8lZUKmvzCMtzC1rbocVAEYEyEAMoAKqQACsm09IwsSOxcvAIiYpLSnPJKqogy5jp6DdxbPNY2IEzUEHCssbgEEMOpYxmIgjIzeZqmcjKcCvzF6qYbupJyZgMf2aIDO8ScLlcV1G6QmmW2whwgk2-DkmiMgJkmi+CCx4iRemRMmk4hkBhBYPaYE60LS41A8JkOM49xw4nZHLk4n47K5FNaWFpNzhXCMzKMvz0Uqlmj2liAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QBsCWUAWAXAdAJ0gGIBxAeUVAAcB7WVLVagOwpAA9EBGAFk5wE4ArAGZOnAOziADMP7Dx-AEwAaEAE9Ew7gDYB-fQA4lB7VP6cDAX0uq0mXGrDJk1AO6E2sLAEMsYHN4AZn54ABSKUpEAlIR22DiOzm6sNHQMzKwcCDx8QqIS0rLySqoaCPxSOJHVioryRcLC1rbo8VAEYEyEAMoAKqQACim09IwsSOxcvAIiYpIycgoq6oiKgvx6+ouK4tzm-NY2IEzUEHCscbgEEMNpY5mIgoozosJS64LcUpyKBqWapk2-AM6x02iEnGaIEuCScLlct1GGQmWWEBkqim0gm0P0xBmEWO02n+CB2uj2WxkBnREPEUJh7TAnUR6XGoCy3GWZU4TxwRP5shk+UE9NaWBZ9xRXD+K2yVkOQA */
   createMachine<LightContext, LightEvent, LightTypestate>(
     {
       context: { lastAction: "STOP" },
